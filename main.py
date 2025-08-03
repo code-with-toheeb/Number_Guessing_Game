@@ -2,38 +2,68 @@ import random
 
 MAX_NUM = 50
 MIN_NUM = 1
-def computer_pick():
-    number_list = []
+
+LOW = 15
+MEDIUM = 10
+HIGH = 5
+
+
+def get_guess_limit():
+    
+    while True:
+        level = input(f"Choose a difficulty level (low, medium, or high): ").lower()
+        if level == 'low':
+            return LOW
+        elif level == 'medium':
+            return MEDIUM
+        elif level == "high":
+            return HIGH
+        else:
+            print("Invalid input. Please choose: low, medium, or high.")
+
+        
+def generate_random_number():
+    number_range = []
 
     for num in range(MIN_NUM,MAX_NUM + 1):
-        number_list.append(num)
+        number_range.append(num)
     
-    c_pick = random.choice(number_list)
+    return random.choice(number_range)
 
-    return c_pick
-
-
-def user_pick(generated_number):
+def check_user_input():
     while True:
-        user_guess = input(f"Enter your guess from ({MIN_NUM} - {MAX_NUM}) ")
-        if user_guess.isdigit():
-            user_guess = int(user_guess)
-            if MIN_NUM <= user_guess <= MAX_NUM:
-                if user_guess > generated_number:
-                    print(f"Your Guess is greater than the number ")
-                elif user_guess < generated_number:
-                    print(f"Your Guess is less than the number ")
-                elif user_guess == generated_number:
-                    print("Hooray You won!!!")
-                    break
+        guess = input(f"Enter your guess from ({MIN_NUM} - {MAX_NUM}) ")
+        if guess.isdigit():
+            guess = int(guess)
+            if MIN_NUM <= guess <= MAX_NUM:
+                return guess
+            else:
+                print(f"Enter a number between {MIN_NUM} - {MAX_NUM}")
         else:
-            print(f"Please enter a valid number ")
-    
+            print(f"Invalid Number, Please Enter a valid number between {MIN_NUM} - {MAX_NUM}")
+
+    return guess
+
+def play_game(limits, secret_number):
+        for attempt in range(1, limits + 1):
+            guess = check_user_input()
+            if guess > secret_number:
+                print(f"Your Guess is greater than the number ")
+            elif guess < secret_number:
+                print(f"Your Guess is less than the number ")
+            elif guess == secret_number:
+                print("Hooray You won!!!")
+                return
+
+        print(f"You Lost coz you already use all your attempt The correct number is {secret_number}")
+
+        
 
 def main():
-    machine_pick = computer_pick()
-    while True:
-        user_pick(machine_pick)
-        break
+
+    number_to_guess = generate_random_number()
+    limit = get_guess_limit()
+    play_game(limit, number_to_guess)
+
 
 main()
