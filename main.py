@@ -3,11 +3,18 @@ import random
 MAX_NUM = 50
 MIN_NUM = 1
 MIN_DEPOSIT = 1
+MIN_STAKE = 1
 
 LOW = 15
 MEDIUM = 10
 HIGH = 5
 
+
+multiplier = {
+    "low" : 2,
+    "medium" : 4,
+    "high": 10
+}
 def deposit():
     while True:
         amount = input(f"Enter the amount you want to deposit($) ")
@@ -19,6 +26,22 @@ def deposit():
                 print(f"Enter amount greater than {MIN_DEPOSIT}")
         else:
             print("Enter a valid amount")
+
+def user_stake(balance):
+    while True:
+        bet = input(f"How much do you want to stake($) ")
+        if bet.isdigit():
+            bet = int(bet)
+            if bet > 0:
+                if bet <= balance:
+                    balance -= bet
+                    return balance, bet
+                else:
+                    print("You dont have sufficient balance")
+            else:
+                print(f"Enter stake amount from {MIN_STAKE}$ above")
+        else:
+            print("Please enter a valid number")
 
 def get_guess_limit():
     
@@ -72,10 +95,10 @@ def play_game(limits, secret_number):
         
 
 def main():
-    
+    balance = deposit()
+    new_balance, bet = user_stake(balance)
     number_to_guess = generate_random_number()
     limit = get_guess_limit()
     play_game(limit, number_to_guess)
 
 
-main()
