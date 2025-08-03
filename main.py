@@ -2,11 +2,23 @@ import random
 
 MAX_NUM = 50
 MIN_NUM = 1
+MIN_DEPOSIT = 1
 
 LOW = 15
 MEDIUM = 10
 HIGH = 5
 
+def deposit():
+    while True:
+        amount = input(f"Enter the amount you want to deposit($) ")
+        if amount.isdigit():
+            amount = int(amount)
+            if amount > MIN_DEPOSIT:
+                return amount
+            else:
+                print(f"Enter amount greater than {MIN_DEPOSIT}")
+        else:
+            print("Enter a valid amount")
 
 def get_guess_limit():
     
@@ -60,7 +72,7 @@ def play_game(limits, secret_number):
         
 
 def main():
-
+    
     number_to_guess = generate_random_number()
     limit = get_guess_limit()
     play_game(limit, number_to_guess)
