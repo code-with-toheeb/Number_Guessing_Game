@@ -10,11 +10,7 @@ MEDIUM = 10
 HIGH = 5
 
 
-multiplier = {
-    "low" : 2,
-    "medium" : 4,
-    "high": 10
-}
+
 def deposit():
     while True:
         amount = input(f"Enter the amount you want to deposit($) ")
@@ -43,18 +39,28 @@ def user_stake(balance):
         else:
             print("Please enter a valid number")
 
+
+
+
+
+def get_user_balance_and_bet(balance):
+    user_balance, bet_amount = user_stake(balance)
+    return user_balance, bet_amount
 def get_guess_limit():
     
     while True:
         level = input(f"Choose a difficulty level (low, medium, or high): ").lower()
         if level == 'low':
-            return LOW
+            print(f"You pick low your winning will be multiply by 2")
+            return LOW, 2
         elif level == 'medium':
-            return MEDIUM
+            print(f"You pick medium your winning will be multiply by 4")
+            return MEDIUM, 4
         elif level == "high":
-            return HIGH
+            print(f"You pick high your winning will be multiply by 10")
+            return HIGH, 10
         else:
-            print("Invalid input. Please choose: low, medium, or high.")
+            print("Invalid input. Please choose between: low, medium, or high.")
 
         
 def generate_random_number():
@@ -79,7 +85,7 @@ def check_user_input():
 
     return guess
 
-def play_game(limits, secret_number):
+def play_game(limits, secret_number, winnings, new_balance):
         for attempt in range(1, limits + 1):
             guess = check_user_input()
             if guess > secret_number:
@@ -87,10 +93,12 @@ def play_game(limits, secret_number):
             elif guess < secret_number:
                 print(f"Your Guess is less than the number ")
             elif guess == secret_number:
-                print("Hooray You won!!!")
+                print(f"Hooray You won!!! {winnings}$")
+                print(f"Your New Balance is {new_balance + winnings}$")
                 return
 
-        print(f"You Lost coz you already use all your attempt The correct number is {secret_number}")
+        print(f"You lost! You've used all your attempts. The correct number was {secret_number}.")
+        print(f"Your New Balance is {new_balance}")
 
         
 
@@ -98,7 +106,8 @@ def main():
     balance = deposit()
     new_balance, bet = user_stake(balance)
     number_to_guess = generate_random_number()
-    limit = get_guess_limit()
-    play_game(limit, number_to_guess)
+    limit, multiplier = get_guess_limit()
+    winning = bet * multiplier
+    play_game(limit, number_to_guess, winning, new_balance)
 
-
+main()
